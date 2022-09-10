@@ -1,0 +1,61 @@
+.container {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.main {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .1);
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+}
+
+.main:has(header) {
+  display: block;
+  place-items: unset;
+}
+
+.main:has(textarea) {
+  display: unset;
+  place-items: unset;
+}
+
+@media (min-width: 550px) {
+  .main {
+    height: 90vh;
+    width: 550px;
+  }
+}
+
+.section {
+  display: grid;
+  place-items: center;
+}
+
+.logo {
+  width: 120px;
+}
+
+.title {
+  color: #1d4ed8;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  color: #3b82f6;
+  font-size: 16px;
+  margin: 0px;
+}
+
+.user {
+  margin-top: 16px;
+}
+
+.button {
+  padding-top: 15px;
+}
