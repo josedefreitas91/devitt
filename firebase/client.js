@@ -8,26 +8,37 @@ import {
 import {
   getFirestore,
   collection,
+  query,
+  orderBy,
   addDoc,
-  getDocs,
   Timestamp,
+  onSnapshot,
+  limitToLast,
 } from "firebase/firestore"
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage"
+export {
+  _TaskEvent as TaskEvent,
+  _TaskState as TaskState,
+} from "firebase/storage"
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCasNJqbeV_vdjXLoQMCg3tTXtaWiVjNSI",
-  authDomain: "devtter-aeef4.firebaseapp.com",
-  projectId: "devtter-aeef4",
-  storageBucket: "devtter-aeef4.appspot.com",
-  messagingSenderId: "494013204611",
-  appId: "1:494013204611:web:cb70c1526aefe32a0573b6",
-  measurementId: "G-0SMGNYL4Y5",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_CONFIG_APIKEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_CONFIG_AUTHDOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_CONFIG_PROJECTID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_CONFIG_STORAGEBUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_CONFIG_MESSAGINGSENDERID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_CONFIG_APPID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_CONFIG_MEASUREMENTID,
 }
 
-const app = initializeApp(firebaseConfig)
+const APP_NAME = "[DEFAULT]"
+let app = null
+try {
+  app = initializeApp(firebaseConfig)
+} catch {
+  app = getApp(APP_NAME)
+}
+
 const auth = getAuth(app)
 const db = getFirestore(app)
 
@@ -49,54 +60,60 @@ export const loginWithGitHub = () => {
 
 export const authStateChanged = (onChange) => {
   return onAuthStateChanged(auth, (user) => {
-    console.log("onAuthStateChanged", user)
     const normalizedUser = user ? mapUserFromFirebaseAuth(user) : null
     onChange(normalizedUser)
   })
 }
 
-export const addDevit = async ({ avatar, content, userId, name }) => {
+export const addDevit = async ({ avatar, content, userId, name, img }) => {
   try {
     return await addDoc(collection(db, "devits"), {
       avatar,
       content,
-      userId,
-      name,
       createdAt: Timestamp.fromDate(new Date()),
+      img,
       likesCount: 0,
+      name,
       sharedCount: 0,
+      userId,
     })
   } catch (e) {
-    console.error("Error adding document: ", e)
     return new Promise((reject) => reject(e))
   }
 }
 
-export const fetchLatestsDevits = async () => {
-  return getDocs(collection(db, "devits")).then(({ docs }) => {
-    return docs.map((doc) => {
-      const id = doc.id
-      const data = doc.data()
-      const { createdAt } = data
-      const intl = new Intl.DateTimeFormat("es-ES", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-        timeZone: "America/Lima",
-      })
-      const normalizedCreatedAt = intl.format(
-        new Date(createdAt.seconds * 1000)
-      )
+const mapDevitFromFirebaseToDevitObject = (doc) => {
+  const id = doc.id
+  const data = doc.data()
+  const { createdAt } = data
 
-      return {
-        ...data,
-        id,
-        createdAt: normalizedCreatedAt,
-      }
-    })
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate(),
+  }
+}
+
+export const listenLatestsDevits = (callback) => {
+  const queryOrdered = query(
+    collection(db, "devits"),
+    orderBy("createdAt", "desc"),
+    limitToLast(20)
+  )
+  return onSnapshot(queryOrdered, {
+    next: ({ docs }) => {
+      const newDevits = docs.map(mapDevitFromFirebaseToDevitObject)
+      callback(newDevits)
+    },
+    error: () => {
+      console.log("listenLatestsDevits error")
+    },
   })
+}
+
+export const uploadImage = (file) => {
+  const storage = getStorage()
+  const storageRef = ref(storage, `images/${file.name}`)
+
+  return uploadBytesResumable(storageRef, file)
 }

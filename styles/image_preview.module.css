@@ -1,0 +1,31 @@
+.section {
+ padding: 15px;
+ position: relative;
+}
+
+.button {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  border: 0;
+  color: #fff;
+  font-size: 22px;
+  height: 32px;
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  width: 32px;
+  cursor: pointer;
+}
+
+.img {
+  border-radius: 10px;
+  height: auto;
+  width: 100%;
+}
+
+.imgOnly {
+  border-radius: 10px;
+  height: auto;
+  width: 100%;
+  margin-top: 10px;
+}
