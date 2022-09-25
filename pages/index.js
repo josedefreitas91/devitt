@@ -1,11 +1,11 @@
 import Head from "next/head"
 import { useEffect } from "react"
-import Button from "../components/Button"
-import GitHub from "../components/Icons/GitHub"
-import { loginWithGitHub } from "../firebase/client"
-import styles from "../styles/index.module.css"
+import Button from "components/Button"
+import GitHub from "components/Icons/GitHub"
+import { loginWithGitHub } from "@/firebase/client"
+import styles from "styles/index.module.css"
 import { useRouter } from "next/router"
-import useUser, { USER_STATES } from "../hooks/useUser"
+import useUser, { USER_STATES } from "hooks/useUser"
 
 export default function Index() {
   const user = useUser()

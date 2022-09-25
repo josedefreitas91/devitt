@@ -1,4 +1,4 @@
-import styles from "../../styles/image_preview.module.css"
+import styles from "styles/image_preview.module.css"
 
 export default function ImagePreview({ url, handleClick, imageOnly = false }) {
   if (imageOnly) {

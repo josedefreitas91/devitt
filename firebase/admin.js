@@ -1,5 +1,5 @@
-const { initializeApp, cert, getApp } = require("firebase-admin/app")
-const { getFirestore } = require("firebase-admin/firestore")
+import { initializeApp, cert, getApp } from "firebase-admin/app"
+import { getFirestore } from "firebase-admin/firestore"
 
 const serviceAccount = {
   type: "service_account",

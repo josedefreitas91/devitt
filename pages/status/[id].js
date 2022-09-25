@@ -1,15 +1,17 @@
 import { useRouter } from "next/router"
-import Devit from "../../components/Devit"
-import { firestore } from "../../firebase/admin"
+import Devit from "components/Devit"
+import GoBack from "components/GoBack"
+import { firestore } from "@/firebase/admin"
+import Loading from "components/Loading"
 
 export default function DevitPage(props) {
   const router = useRouter()
 
-  if (router.isFallback)
-    return <img src="/loading.gif" width={25} height={25} />
+  if (router.isFallback) return <Loading />
 
   return (
     <>
+      <GoBack url="/home" />
       <Devit {...props} />
     </>
   )

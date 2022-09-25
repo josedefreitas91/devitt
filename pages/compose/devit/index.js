@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
-import Button from "../../../components/Button"
-import useUser from "../../../hooks/useUser"
-import styles from "../../../styles/devit.module.css"
-import { addDevit, uploadImage, TaskEvent } from "../../../firebase/client"
+import Button from "components/Button"
+import useUser from "hooks/useUser"
+import styles from "styles/devit.module.css"
+import { addDevit, uploadImage, TaskEvent } from "@/firebase/client"
 import { useRouter } from "next/router"
 import { getDownloadURL } from "firebase/storage"
-import ImagePreview from "../../../components/ImagePreview"
-import Avatar from "../../../components/Avatar"
-import ArrowLeft from "../../../components/Icons/ArrowLeft"
+import ImagePreview from "components/ImagePreview"
+import Avatar from "components/Avatar"
 import Head from "next/head"
-import Link from "next/link"
+import GoBack from "components/GoBack"
+import Loading from "components/Loading"
 
 const COMPOSE_STATUS = {
   USET_NOT_KNOW: 0,
@@ -51,7 +51,7 @@ export default function ComposeDevit() {
       img: imgURL,
     })
       .then(() => {
-        router.push("/")
+        router.push("/home")
       })
       .catch((error) => {
         console.log("addDevit error", error)
@@ -81,7 +81,6 @@ export default function ComposeDevit() {
 
   useEffect(() => {
     if (task) {
-      console.log("task", task)
       let onProgress = (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         console.log(`Upload is ${progress}% done`)
@@ -98,23 +97,20 @@ export default function ComposeDevit() {
     }
   }, [task])
 
+  if (status === COMPOSE_STATUS.LOADING) return <Loading />
+
   return (
     <>
       <Head>
         <title>Crear un devit / Devtter</title>
       </Head>
-      <section className={styles.return}>
-        <Link href="/home">
-          <a title="Atrás">
-            <ArrowLeft width={32} height={32} />
-          </a>
-        </Link>
+      <GoBack url="/home">
         <div className={styles.button}>
           <Button disabled={isButtonDisabled} onClick={handleClick}>
             Devitear
           </Button>
         </div>
-      </section>
+      </GoBack>
       <section className={styles.container}>
         {user && (
           <section className={styles.containerAvatar}>

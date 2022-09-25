@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import Link from "next/link"
-import Devit from "../../components/Devit"
-import { listenLatestsDevits } from "../../firebase/client"
-import useUser from "../../hooks/useUser"
-import styles from "../../styles/home.module.css"
-import Home from "../../components/Icons/Home"
-import Search from "../../components/Icons/Search"
-import Create from "../../components/Icons/Create"
 import Head from "next/head"
+import Link from "next/link"
+import Devit from "components/Devit"
+import { listenLatestsDevits } from "@/firebase/client"
+import useUser from "hooks/useUser"
+import styles from "styles/home.module.css"
+import Home from "components/Icons/Home"
+import Search from "components/Icons/Search"
+import Create from "components/Icons/Create"
 
 export default function HomePage() {
   const [timeline, setTimeline] = useState([])
@@ -36,7 +36,7 @@ export default function HomePage() {
             key={id}
             id={id}
             avatar={avatar}
-            username={name}
+            name={name}
             img={img}
             content={content}
             createdAt={createdAt}

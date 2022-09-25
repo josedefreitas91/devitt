@@ -1,15 +1,15 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
-import Avatar from "../../components/Avatar"
-import useDateTimeFormat from "../../hooks/useDataTimeFormat"
-import useTimeAgo from "../../hooks/useTimeAgo"
-import styles from "../../styles/devit.module.css"
-import ImagePreview from "../ImagePreview"
+import Avatar from "components/Avatar"
+import useDateTimeFormat from "hooks/useDataTimeFormat"
+import useTimeAgo from "hooks/useTimeAgo"
+import styles from "styles/devit.module.css"
+import ImagePreview from "components/ImagePreview"
 
 export default function Devit({
   id,
   avatar,
-  username,
+  name,
   content,
   email,
   createdAt,
@@ -27,12 +27,12 @@ export default function Devit({
   return (
     <article className={styles.article} onClick={handleArticleClick}>
       <div className={styles.avatar}>
-        <Avatar src={avatar} alt={username} />
+        <Avatar src={avatar} alt={name} />
       </div>
 
       <section className={styles.section}>
         <header>
-          <strong>{username}</strong>
+          <strong>{name}</strong>
           <Link href={`/status/${id}`}>
             <a className={styles.link}>
               <time className={styles.time} title={createdAtFormated}>

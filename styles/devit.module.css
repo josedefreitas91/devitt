@@ -63,21 +63,22 @@
   text-decoration: underline;
 }
 
-.return {
-  padding: 10px;
+.go_back {
+  padding: 5px 10px;
   border-bottom: 2px solid #eff3f4bd;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 49px;
 }
 
-.return a:hover {
+.go_back a:hover {
   background: radial-gradient(#0099ff29 15%, transparent 16%);
   background-size: 180px 180px;
   background-position: center;
   border-radius: 999px;
 }
 
-.return a > svg {
+.go_back a > svg {
   display: flex;
 }
