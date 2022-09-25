@@ -35,7 +35,7 @@ export async function getStaticProps(context) {
     .get()
     .then((doc) => {
       if (!doc.exists) {
-        response.status(404).end()
+        throw new Error("Devit not found")
       }
 
       const id = doc.id

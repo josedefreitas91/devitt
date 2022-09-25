@@ -6,6 +6,8 @@ import { loginWithGitHub } from "@/firebase/client"
 import styles from "styles/index.module.css"
 import { useRouter } from "next/router"
 import useUser, { USER_STATES } from "hooks/useUser"
+import Loading from "components/Loading"
+import Image from "next/image"
 
 export default function Index() {
   const user = useUser()
@@ -28,7 +30,7 @@ export default function Index() {
       </Head>
 
       <section className={styles.section}>
-        <img className={styles.logo} src="/logo.png" alt="logo" />
+        <Image src="/logo.png" alt="logo" width={120} height={140} />
         <h1 className={styles.title}>Devtter</h1>
         <h2 className={styles.subtitle}>
           Talk about development with developers
@@ -40,9 +42,7 @@ export default function Index() {
               Login with GitHub
             </Button>
           )}
-          {user === USER_STATES.NOT_KNOW && (
-            <img src="/loading.gif" width={25} height={25} />
-          )}
+          {user === USER_STATES.NOT_KNOW && <Loading />}
         </div>
       </section>
     </>

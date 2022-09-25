@@ -81,14 +81,14 @@ export default function ComposeDevit() {
 
   useEffect(() => {
     if (task) {
-      let onProgress = (snapshot) => {
+      const onProgress = (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         console.log(`Upload is ${progress}% done`)
       }
-      let onError = () => {
+      const onError = () => {
         console.log("onError")
       }
-      let onComplete = () => {
+      const onComplete = () => {
         console.log("onComplete")
         getDownloadURL(task.snapshot.ref).then(setImgURL)
       }
