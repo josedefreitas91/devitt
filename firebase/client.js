@@ -13,7 +13,7 @@ import {
   addDoc,
   Timestamp,
   onSnapshot,
-  limitToLast,
+  limit,
 } from "firebase/firestore"
 import { getStorage, ref, uploadBytesResumable } from "firebase/storage"
 export {
@@ -98,7 +98,7 @@ export const listenLatestsDevits = (callback) => {
   const queryOrdered = query(
     collection(db, "devits"),
     orderBy("createdAt", "desc"),
-    limitToLast(20)
+    limit(20)
   )
   return onSnapshot(queryOrdered, {
     next: ({ docs }) => {

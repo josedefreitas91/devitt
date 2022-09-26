@@ -7,6 +7,12 @@ const DATE_UNITS = [
   ["second", 1],
 ]
 
+const DATE_UNITS_INTERVAL = {
+  hour: 3600000,
+  minute: 60000,
+  second: 5000,
+}
+
 const getDateDiffs = (timestamp) => {
   const now = Date.now()
   const elapsed = (timestamp - now) / 1000
@@ -25,10 +31,21 @@ export default function useTimeAgo(timestamp) {
   const { value, unit } = timeAgo
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    if (unit === "day") return
+
+    let interval = null
+    const intervalEffect = () => {
       const newTimeAgo = getDateDiffs(timestamp)
       setTimeAgo(newTimeAgo)
-    }, 5000)
+      if (unit !== newTimeAgo.unit && newTimeAgo.unit !== "day") {
+        clearInterval(interval)
+        interval = setInterval(
+          intervalEffect,
+          DATE_UNITS_INTERVAL[newTimeAgo.unit]
+        )
+      }
+    }
+    interval = setInterval(intervalEffect, DATE_UNITS_INTERVAL[unit])
 
     return () => clearInterval(interval)
   }, [timestamp])
